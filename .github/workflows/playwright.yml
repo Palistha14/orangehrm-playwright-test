@@ -10,12 +10,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      env:
-        BASE_URL: ${{ secrets.BASE_URL }}
-        EMAIL: ${{ secrets.EMAIL }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        EMAIL_TEST: ${{ secrets.EMAIL_TEST }}
-        PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+      EMAIL: ${{ secrets.EMAIL }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      EMAIL_TEST: ${{ secrets.EMAIL_TEST }}
+      PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
 
     steps:
       - name: Checkout repo
