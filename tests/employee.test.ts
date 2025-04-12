@@ -11,8 +11,15 @@ type Employee = {
 import rawData from '../data/employeeData.json';
 import { employeeTestData } from '../data/employeeTestData';
 const employeeData = rawData as Employee[];
-const { employeeID, nationality, maritalStatus, licenseNumber, licenseExpiry, dateOfBirth, gender } = employeeTestData[0];
-
+const {
+  employeeID,
+  nationality,
+  maritalStatus,
+  licenseNumber,
+  licenseExpiry,
+  dateOfBirth,
+  gender,
+} = employeeTestData[0];
 
 test.describe('Employee Tests', () => {
   let loginPage: LoginPage;
@@ -30,38 +37,42 @@ test.describe('Employee Tests', () => {
   });
 
   employeeData.forEach(({ firstName, middleName, lastName }) => {
-    test(`Add employee: ${firstName} ${middleName ? middleName + ' ' : ''}${lastName}`, async ({ }) => {
-    // Act: Click Add Employee
-    await employeePage.addEmployee(firstName, lastName, middleName);
-  
-    // Assert: Check if its successful
-    await employeePage.isPersonalDetailsPageDisplayed();
+    test(`Add employee: ${firstName} ${middleName ? middleName + ' ' : ''}${lastName}`, async ({}) => {
+      // Act: Click Add Employee
+      await employeePage.addEmployee(firstName, lastName, middleName);
+
+      // Assert: Check if its successful
+      await employeePage.isPersonalDetailsPageDisplayed();
     });
   });
-  
+
   test('Edit employee', async ({ page }) => {
     const employeeIDLocator = page.locator(`text="${employeeID}"`);
-  
+
     await page.waitForSelector('.oxd-table');
-  
+
     await expect(employeeIDLocator).toBeVisible();
     await page.locator(`text="${employeeID}"`).click();
-  
+
     await employeePage.isPersonalDetailsPageDisplayed();
-  
+
     await employeePage.selectDropdown('Nationality', nationality!);
     await employeePage.selectDropdown('Marital Status', maritalStatus!);
     await employeePage.fillInput("Driver's License Number", licenseNumber!);
     await employeePage.fillInput('License Expiry Date', licenseExpiry!);
     await employeePage.fillInput('Date of Birth', dateOfBirth!);
     await employeePage.selectRadio(gender!);
-  
+
     await employeePage.saveForm();
   });
 
   test('Delete employee', async ({ page }) => {
-    const employeeID = '0020'
-    await page.locator(`div.oxd-table-row:has(div:has-text("${employeeID}")) .oxd-checkbox-input`).click();
+    const employeeID = '0020';
+    await page
+      .locator(
+        `div.oxd-table-row:has(div:has-text("${employeeID}")) .oxd-checkbox-input`
+      )
+      .click();
     await page.getByRole('button', { name: 'Delete Selected' }).click();
     await page.getByRole('button', { name: 'Yes, Delete' }).click();
     const response = await page.waitForResponse(

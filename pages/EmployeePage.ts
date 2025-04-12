@@ -4,7 +4,7 @@ export class EmployeePage {
   constructor(private page: Page) {}
 
   async goToEmployeePage() {
-    await this.page.locator('text=PIM').click();    
+    await this.page.locator('text=PIM').click();
   }
 
   async addEmployee(firstName: string, lastName: string, middleName?: string) {
@@ -26,13 +26,17 @@ export class EmployeePage {
   }
 
   async selectDropdown(labelText: string, value: string) {
-    const dropdown = this.page.locator(`div.oxd-input-group:has(label:has-text("${labelText}"))`);
+    const dropdown = this.page.locator(
+      `div.oxd-input-group:has(label:has-text("${labelText}"))`
+    );
     await dropdown.locator('.oxd-select-text').click();
     await this.page.locator(`.oxd-select-dropdown >> text=${value}`).click();
   }
 
   async fillInput(labelText: string, value: string) {
-    const input = this.page.locator(`div.oxd-input-group:has(label:has-text("${labelText}")) input`);
+    const input = this.page.locator(
+      `div.oxd-input-group:has(label:has-text("${labelText}")) input`
+    );
     await input.click();
     await input.fill(value);
     await input.press('Enter');
@@ -45,7 +49,8 @@ export class EmployeePage {
   async saveForm() {
     await this.page.click('button:has-text("Save")');
     const response = await this.page.waitForResponse(
-      (resp) => resp.url().includes('/personal-details') && resp.status() === 200
+      (resp) =>
+        resp.url().includes('/personal-details') && resp.status() === 200
     );
     console.log('Response status:', response.status());
     expect(response.status()).toBe(200);

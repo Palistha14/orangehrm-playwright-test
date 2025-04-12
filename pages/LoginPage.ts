@@ -1,10 +1,12 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Page } from '@playwright/test';
 
 export class LoginPage {
   constructor(private page: Page) {}
 
   async navigatetoLoginPage() {
-    await this.page.goto('/web/index.php/auth/login', { waitUntil: 'domcontentloaded' });
+    await this.page.goto('/web/index.php/auth/login', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async login(username: string, password: string) {

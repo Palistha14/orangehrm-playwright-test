@@ -1,5 +1,5 @@
 {
-"compilerOptions": {
+  "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
     "strict": true,
@@ -8,8 +8,7 @@
     "types": ["node", "playwright"],
     "resolveJsonModule": true,
     "outDir": "dist"
-},
-"include": ["**/*.ts"],
-"exclude": ["node_modules"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
-  
