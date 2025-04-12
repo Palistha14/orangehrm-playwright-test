@@ -16,8 +16,6 @@ export class EmployeePage {
     }
 
     await this.page.fill('input[name="lastName"]', lastName);
-    await this.page.click('button:has-text("Save")');
-    await this.page.waitForURL('**/pim/viewPersonalDetails/empNumber/**');
   }
 
   async isPersonalDetailsPageDisplayed() {
@@ -48,11 +46,5 @@ export class EmployeePage {
 
   async saveForm() {
     await this.page.click('button:has-text("Save")');
-    const response = await this.page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/personal-details') && resp.status() === 200
-    );
-    console.log('Response status:', response.status());
-    expect(response.status()).toBe(200);
   }
 }

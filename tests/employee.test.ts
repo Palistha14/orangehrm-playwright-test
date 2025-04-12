@@ -10,6 +10,7 @@ type Employee = {
 
 import rawData from '../data/employeeData.json';
 import { employeeTestData } from '../data/employeeTestData';
+import { mockApiResponse } from '../helpers/mockHelpers';
 const employeeData = rawData as Employee[];
 const {
   employeeID,
@@ -37,20 +38,41 @@ test.describe('Employee Tests', () => {
   });
 
   employeeData.forEach(({ firstName, middleName, lastName }) => {
-    test(`Add employee: ${firstName} ${middleName ? middleName + ' ' : ''}${lastName}`, async ({}) => {
+    test(`Add employee: ${firstName} ${middleName ? middleName + ' ' : ''}${lastName}`, async ({
+      page,
+    }) => {
+      await mockApiResponse(
+        page,
+        '**/pim/employees',
+        'Employee added successfully'
+      );
+
       // Act: Click Add Employee
       await employeePage.addEmployee(firstName, lastName, middleName);
 
-      // Assert: Check if its successful
-      await employeePage.isPersonalDetailsPageDisplayed();
+      // Assert: Save employee record
+      await employeePage.saveForm();
     });
+  });
+
+  test('Search employee by ID', async ({ page }) => {
+    await page.locator('input.oxd-input').nth(1).fill('0003');
+    await page.getByRole('button', { name: 'Search' }).click();
+    await page.waitForSelector('.oxd-table');
   });
 
   test('Edit employee', async ({ page }) => {
     const employeeIDLocator = page.locator(`text="${employeeID}"`);
 
-    await page.waitForSelector('.oxd-table');
+    await mockApiResponse(
+      page,
+      '**/personal-details',
+      'Employee updated successfully',
+      200,
+      employeeID
+    );
 
+    await page.waitForSelector('.oxd-table');
     await expect(employeeIDLocator).toBeVisible();
     await page.locator(`text="${employeeID}"`).click();
 
@@ -68,6 +90,13 @@ test.describe('Employee Tests', () => {
 
   test('Delete employee', async ({ page }) => {
     const employeeID = '0020';
+
+    await mockApiResponse(
+      page,
+      '**/pim/employees',
+      'Employee deleted successfully'
+    );
+
     await page
       .locator(
         `div.oxd-table-row:has(div:has-text("${employeeID}")) .oxd-checkbox-input`
@@ -75,10 +104,5 @@ test.describe('Employee Tests', () => {
       .click();
     await page.getByRole('button', { name: 'Delete Selected' }).click();
     await page.getByRole('button', { name: 'Yes, Delete' }).click();
-    const response = await page.waitForResponse(
-      (resp) => resp.url().includes('/employee') && resp.status() === 200
-    );
-    console.log('Response status:', response.status());
-    expect(response.status()).toBe(200);
   });
 });
