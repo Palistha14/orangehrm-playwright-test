@@ -16,26 +16,54 @@ test.describe('User Tests', () => {
   });
 
   test('Add new user', async ({ page }) => {
-    const employeeName = "Palistha Shakya";
-    const username = "testUser.qa";
-    const password = "P@ss123word";
+    const employeeName = 'Palistha Shakya';
+    const username = 'testUser.qa';
+    const password = 'P@ss123word';
 
-    await mockApiResponse(
-        page,
-        '**/admin/users',
-        'User added successfully'
-      );
-    
-    await userPage.goToUserPage()
-    await userPage.selectDropdown("User Role", "Admin")
-    await userPage.selectDropdown("Status", "Enabled")
+    await mockApiResponse(page, '**/admin/users', 'User added successfully');
+
+    await userPage.goToUserPage();
+    await userPage.addUser();
+    await userPage.selectDropdown('User Role', 'Admin');
+    await userPage.selectDropdown('Status', 'Enabled');
 
     await page.getByPlaceholder('Type for hints...').fill(`${employeeName}`);
-    await page.locator('.oxd-autocomplete-dropdown').locator(`span:has-text("${employeeName}")`).click();
-    await page.locator('.oxd-input-group:has(label:text("Username")) input').fill(`${username}`);
+    await page
+      .locator('.oxd-autocomplete-dropdown')
+      .locator(`span:has-text("${employeeName}")`)
+      .click();
+    await page
+      .locator('.oxd-input-group:has(label:text("Username")) input')
+      .fill(`${username}`);
     await page.locator('input[type="password"]').nth(0).fill(`${password}`);
     await page.locator('input[type="password"]').nth(1).fill(`${password}`);
 
-    await userPage.saveForm()
+    await userPage.saveForm();
+  });
+
+  test('Edit user', async ({ page }) => {
+    const username = 'anna.test';
+    await mockApiResponse(page, '**/admin/users', 'User updated successfully');
+    await userPage.goToUserPage();
+    await page
+      .locator(
+        `div.oxd-table-row:has(div:has-text("${username}")) i.bi-pencil-fill`
+      )
+      .click();
+    await userPage.selectDropdown('Status', 'Disabled');
+    await userPage.saveForm();
+  });
+
+  test('Delete user', async ({ page }) => {
+    const username = 'anna.test';
+    await mockApiResponse(page, '**/admin/users', 'User deleted successfully');
+    await userPage.goToUserPage();
+    await page
+      .locator(
+        `div.oxd-table-row:has(div:has-text("${username}")) .oxd-checkbox-input`
+      )
+      .click();
+    await page.getByRole('button', { name: 'Delete Selected' }).click();
+    await page.getByRole('button', { name: 'Yes, Delete' }).click();
   });
 });
