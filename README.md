@@ -28,12 +28,6 @@
   - Update/Edit
   - Delete
 
-## Edge Case Testing
-
-- Empty fields
-- Special characters (e.g., `!@#$%^&*()`)
-- Very long inputs (255+ characters)
-
 ## Data-Driven Testing
 
 - Employee test cases driven via a `JSON` data file.
