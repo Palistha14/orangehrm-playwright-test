@@ -5,7 +5,7 @@
 - **Playwright** (Test automation framework)
 - **Node.js** (JavaScript runtime)
 - **TypeScript** (Typed superset of JavaScript)
-- **Allure / Playwright HTML Reports** (Test reporting)
+- **Playwright HTML Reports** (Test reporting)
 - **GitHub Actions** (CI/CD for automated test runs)
 - **dotenv** (Environment variable management)
 - **VSCode** (Code editor)
